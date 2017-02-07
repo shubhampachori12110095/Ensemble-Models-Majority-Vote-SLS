@@ -1,5 +1,5 @@
 """
-Construct the FWLS ensemble model using logistic regression
+Construct the SLS ensemble model using logistic regression
 """
 
 import numpy as np
@@ -11,8 +11,8 @@ from sklearn.externals import six
 from sklearn.base import clone
 from sklearn.linear_model import LogisticRegression
 
-class FWLS_Classifier():
-    """An FWLS ensemble classifier using logistic regression
+class SLS_Classifier():
+    """An SLS ensemble classifier using logistic regression
 
     Parameters
     -----------
@@ -72,7 +72,7 @@ class FWLS_Classifier():
     def get_params(self, deep=True):
         """ Get classifier parameter names for GridSearch"""
         if not deep:
-            return super(FWLS_Classifier, self).get_params(deep=False)
+            return super(SLS_Classifier, self).get_params(deep=False)
         else:
             out = self.named_classifiers.copy()
             for name, step in six.iteritems(self.named_classifiers):

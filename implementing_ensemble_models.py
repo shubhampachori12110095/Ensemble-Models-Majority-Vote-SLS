@@ -1,5 +1,5 @@
 '''
-Ensemble models:  Implement majority vote classifier, and a FWLS logistic regression with the Iris dataset
+Ensemble models:  Implement majority vote classifier, and a SLS logistic regression with the Iris dataset
 '''
 
 import numpy as np
@@ -121,34 +121,34 @@ plt.show()
 
 
 """
-FWLS ensemble classifier begins here
+SLS ensemble classifier begins here
 """
 
-import fwls_logistic_reg_classifier as fwls
+import sls_logistic_reg_classifier as sls
 from sklearn.linear_model import LogisticRegression
 
 #Apply standarized scaling to the SVM and KNN models
 pipe1 = Pipeline([['sc', StandardScaler()], ['clf', classifier1]])
 pipe3 = Pipeline([['sc', StandardScaler()], ['clf', classifier3]])
 
-#Now implement the FWLS classifier
-fwls_clf = fwls.FWLS_Classifier(classifiers=[pipe1, classifier2, pipe3])
+#Now implement the SLS classifier
+sls_clf = sls.SLS_Classifier(classifiers=[pipe1, classifier2, pipe3])
 
 #Fit the component models to the training set
-fwls_clf.fit(x_train, y_train)
+sls_clf.fit(x_train, y_train)
 #Predict classifications of training set observations for each component model
-y_train_pred = fwls_clf.predict(x_train)
+y_train_pred = sls_clf.predict(x_train)
 #Predict classifications of test set observations for each component model
-y_test_pred = fwls_clf.predict(x_test)
+y_test_pred = sls_clf.predict(x_test)
 
 #Fit a logistic regression to the predicted y values for each model
 pipe_lr = Pipeline([('clf', LogisticRegression(random_state=1))])
 pipe_lr.fit(y_train_pred, y_train)
-#Predict the y values of the test set using the fitted FWLS ensemble model (the prediction is made with the composite predictions of the component models)
+#Predict the y values of the test set using the fitted SLS ensemble model (the prediction is made with the composite predictions of the component models)
 y_pred = pipe_lr.predict(y_test_pred)
 
-#View the test accuracy of the FWLS ensemble model                  
-print('Test Accuracy of FWLS ensemble model: %.3f' % pipe_lr.score(y_test_pred, y_test))
+#View the test accuracy of the SLS ensemble model                  
+print('Test Accuracy of SLS ensemble model: %.3f' % pipe_lr.score(y_test_pred, y_test))
 
 #Build a confusion matrix
 from sklearn.metrics import confusion_matrix
@@ -162,7 +162,7 @@ for i in range(confmat.shape[0]):
         ax.text(x=j, y=i, s=confmat[i,j], va='center', ha='center')
 plt.xlabel('predicted values')
 plt.ylabel('true values')
-plt.title('Confusion Matrix: FWLS Ensemble Classifier')
+plt.title('Confusion Matrix: SLS Ensemble Classifier')
 plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
 plt.show()
 
